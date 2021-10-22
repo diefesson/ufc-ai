@@ -1,23 +1,14 @@
 mod ai;
+mod puzzle;
 
 use ai::functions::*;
 use ai::search::*;
 use ai::strategy::*;
 
-#[derive(Clone, Hash, PartialEq, Eq, Debug)]
-struct NumberState(i32);
-
-impl ai::node::State for NumberState{}
-
-fn expander(ns: &NumberState) -> Vec<NumberState>{
-    vec![NumberState(ns.0 - 1), NumberState(ns.0 + 1)]
-}
+use puzzle::*;
 
 fn main() {
-    let n = NumberState(5);
-    let path = search(&n, FifoStrategy::new(), |n| n.0 == 10, expander, one_distance, zero_heuristic);
-    for s in path{
-        println!("{:?}", s.state());
-    }
-    println!("Hello");
+    let s = PuzzleState::new();
+    println!("{:?}", s);
+    println!("{:?}", s.move_tile(LEFT).unwrap());
 }
