@@ -8,7 +8,6 @@ use ai::strategy::*;
 use puzzle::*;
 
 fn main() {
-    let s = PuzzleState::new();
-    println!("{:?}", s);
-    println!("{:?}", s.move_tile(LEFT).unwrap());
+    let ps = PuzzleState::<4>::new();
+    
 }

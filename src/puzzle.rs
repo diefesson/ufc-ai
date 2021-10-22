@@ -29,19 +29,34 @@ pub struct PuzzleState<const S: usize> {
     numbers: [[i32; S]; S],
 }
 
-impl PuzzleState<4> {
+/* impl PuzzleState<4> {
     pub fn new() -> Self {
-        Self::new_with_numbers(
-            3,
-            3,
-            [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]],
-        )
+        Self::new_with_numbers([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]])
     }
-}
+} */
 
 impl<const S: usize> PuzzleState<S> {
-    pub fn new_with_numbers(i: usize, j: usize, numbers: [[i32; S]; S]) -> PuzzleState<S> {
-        Self { i, j, numbers }
+    pub fn new() -> Self {
+        let mut numbers = [[0; S]; S];
+        for i in 0..S {
+            for j in 0..S {
+                numbers[i][j] = (i * S + j) as i32;
+            }
+        }
+        numbers[S - 1][S - 1] = 0;
+        Self {
+            i: S - 1,
+            j: S - 1,
+            numbers,
+        }
+    }
+
+    pub fn new_with_numbers(numbers: [[i32; S]; S]) -> PuzzleState<S> {
+        let zero_position = find_number(0, &numbers);
+        match zero_position {
+            Some((i, j)) => return Self { i, j, numbers },
+            None => panic!("missing 0"),
+        }
     }
 
     pub fn move_tile(&self, move_direction: MoveDirection) -> Option<PuzzleState<S>> {
@@ -49,7 +64,6 @@ impl<const S: usize> PuzzleState<S> {
         let (i, j) = (self.i as isize + di, self.j as isize + dj);
         if Self::valid_pos(i, j) {
             let (i, j) = (i as usize, j as usize);
-            println!("si: {}, sj: {}, di: {}, dj: {}, i: {}, j: {}", self.i, self.j, di, dj, i, j);
             let mut moved = Self {
                 numbers: self.numbers.clone(),
                 i: i as usize,
@@ -68,13 +82,24 @@ impl<const S: usize> PuzzleState<S> {
     }
 }
 
-impl <const S: usize> PartialEq for PuzzleState<S>{
-    fn eq(&self, other: &Self) -> bool{
+impl<const S: usize> PartialEq for PuzzleState<S> {
+    fn eq(&self, other: &Self) -> bool {
         self.numbers == other.numbers
     }
 }
 
 impl<const S: usize> State for PuzzleState<S> {}
+
+pub fn find_number<const S: usize>(number: i32, numbers: &[[i32; S]; S]) -> Option<(usize, usize)> {
+    for (i, row) in numbers.iter().enumerate() {
+        for (j, n) in row.iter().enumerate() {
+            if *n == number {
+                return Some((i, j));
+            }
+        }
+    }
+    return None;
+}
 
 pub fn puzzle_state_expander<const S: usize>(state: &PuzzleState<S>) -> Vec<PuzzleState<S>> {
     let options = vec![
