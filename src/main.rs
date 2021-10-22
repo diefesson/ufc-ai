@@ -1,13 +1,20 @@
-use std::collections::HashSet;
+mod ai;
+
+use ai::functions::*;
+use ai::search::*;
+use ai::strategy::*;
+
+#[derive(Clone, Hash, PartialEq, Eq)]
+struct NumberState(i32);
+
+impl ai::node::State for NumberState{}
+
+fn expander(ns: &NumberState) -> Vec<NumberState>{
+    vec![NumberState(ns.0 + 1)]
+}
 
 fn main() {
-
-    let mut numbers = HashSet::new();
-    numbers.insert(1);
-    numbers.insert(2);
-    numbers.insert(3);
-
-    let mut f = numbers.into_iter().find(|n| *n == 2).unwrap();
-
-    println!("Hello, world!");
+    let n = NumberState(5);
+    search(&n, LifoStrategy::new(), |n| n.0 == 10, expander, one_distance, zero_heuristic);
+    println!("Hello");
 }

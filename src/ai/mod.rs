@@ -1,4 +1,4 @@
 pub mod functions;
-pub mod depth_search;
+pub mod search;
 pub mod node;
-pub mod util;
+pub mod strategy;
