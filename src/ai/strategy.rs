@@ -33,27 +33,29 @@ impl Strategy for LifoStrategy {
     }
 }
 
-/* pub struct FifoStrategy<'a, S: State> {
-    queue: LinkedList<&'a S>,
+pub struct FifoStrategy {
+    queue: LinkedList<usize>,
 }
 
-impl<'a, S: State> Strategy<'a, S> for FifoStrategy<'a, S> {
-    fn new() -> Self {
+impl FifoStrategy {
+    pub fn new() -> Self {
         Self {
             queue: LinkedList::new(),
         }
     }
+}
 
-    fn add(&mut self, state: &'a S, _: &'a Node) {
-        self.queue.push_back(state);
+impl Strategy for FifoStrategy {
+    fn add(&mut self, index: usize, _: &Node) {
+        self.queue.push_back(index);
     }
 
-    fn next(&mut self) -> &'a S {
+    fn next(&mut self) -> usize {
         self.queue.pop_front().unwrap()
     }
 }
 
-pub struct GreedyStrategy<'a, S: State> {
+/* pub struct GreedyStrategy<'a, S: State> {
     queue: PriorityQueue<&'a S, NotNan<f64>>,
 }
 
@@ -72,7 +74,7 @@ impl<'a, S: State> Strategy<'a, S> for GreedyStrategy<'a, S> {
     fn next(&mut self) -> &'a S {
         self.queue.pop().unwrap().0
     }
-} */
+}  */
 
 /* pub struct AStarStrategy<'a, S: State> {
     queue: PriorityQueue<&'a Node<S>, NotNan<f64>>,

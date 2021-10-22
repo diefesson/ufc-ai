@@ -23,6 +23,16 @@ pub struct PathEntry<S: State> {
     node: Node,
 }
 
+impl<S: State> PathEntry<S> {
+    pub fn state(&self) -> &S {
+        &self.state
+    }
+
+    pub fn node(&self) -> &Node {
+        &self.node
+    }
+}
+
 pub fn search<S: State>(
     start: &S,
     mut strategy: impl Strategy,
