@@ -9,7 +9,8 @@ use puzzle::*;
 
 fn main() {
     let ps = PuzzleState::<4>::new();
-    let moved = ps.move_tile(LEFT).unwrap();
+    let moved = ps.move_tile(LEFT).unwrap().move_tile(UP).unwrap();
     println!("{:?}", ps);
-    println!("{}", ps.inversion_count());
+    println!("{}", wrong_place_heuristic(&moved));
+    println!("{}", manhattan_heuristic(&moved));
 }

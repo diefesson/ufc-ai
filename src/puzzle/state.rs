@@ -93,6 +93,13 @@ impl<const S: usize> PuzzleState<S> {
         }
     }
 
+    pub fn correct_pos(number: i32) -> (usize, usize){
+        let linear_pos = number - 1;
+        let i = linear_pos / 4;
+        let j = linear_pos % 4;
+        return (i as usize, j as usize); 
+    }
+
     pub fn inversion_count(&self) -> i32 {
         let flattened = self.numbers.iter().flatten().copied().collect::<Vec<_>>();
         let mut inversions = 0;
