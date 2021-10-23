@@ -9,5 +9,7 @@ use puzzle::*;
 
 fn main() {
     let ps = PuzzleState::<4>::new();
-    
+    let moved = ps.move_tile(LEFT).unwrap();
+    println!("{:?}", ps);
+    println!("{}", ps.inversion_count());
 }

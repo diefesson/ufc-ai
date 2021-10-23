@@ -1,6 +1,4 @@
-use super::ai;
-
-use ai::node::State;
+use crate::ai::node::State;
 
 pub enum MoveDirection {
     UP,
@@ -29,21 +27,14 @@ pub struct PuzzleState<const S: usize> {
     numbers: [[i32; S]; S],
 }
 
-/* impl PuzzleState<4> {
-    pub fn new() -> Self {
-        Self::new_with_numbers([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]])
-    }
-} */
-
 impl<const S: usize> PuzzleState<S> {
     pub fn new() -> Self {
         let mut numbers = [[0; S]; S];
         for i in 0..S {
             for j in 0..S {
-                numbers[i][j] = (i * S + j) as i32;
+                numbers[i][j] = (i * S + j + 1) as i32;
             }
         }
-        numbers[S - 1][S - 1] = 0;
         Self {
             i: S - 1,
             j: S - 1,
@@ -52,10 +43,35 @@ impl<const S: usize> PuzzleState<S> {
     }
 
     pub fn new_with_numbers(numbers: [[i32; S]; S]) -> PuzzleState<S> {
-        let zero_position = find_number(0, &numbers);
+        let zero_position = find_number((S * S) as i32, &numbers);
         match zero_position {
             Some((i, j)) => return Self { i, j, numbers },
-            None => panic!("missing 0"),
+            None => panic!("missing final number"),
+        }
+    }
+
+    pub fn i(&self) -> usize {
+        self.i
+    }
+
+    pub fn j(&self) -> usize {
+        self.j
+    }
+
+    pub fn numbers(&self) -> &[[i32; S]; S] {
+        &self.numbers
+    }
+
+    pub fn solveable(&self) -> bool {
+        let even_inversions = self.inversion_count() % 2 == 0;
+        if S % 2 == 0 {
+            even_inversions
+        } else {
+            if even_inversions {
+                self.i % 2 == 1
+            } else {
+                self.i % 2 == 0
+            }
         }
     }
 
@@ -75,6 +91,19 @@ impl<const S: usize> PuzzleState<S> {
         } else {
             None
         }
+    }
+
+    pub fn inversion_count(&self) -> i32 {
+        let flattened = self.numbers.iter().flatten().copied().collect::<Vec<_>>();
+        let mut inversions = 0;
+        for i in 0..flattened.len() {
+            for j in i..flattened.len() {
+                if flattened[i] > flattened[j] {
+                    inversions += 1;
+                }
+            }
+        }
+        return inversions;
     }
 
     pub fn valid_pos(i: isize, j: isize) -> bool {
@@ -99,18 +128,4 @@ pub fn find_number<const S: usize>(number: i32, numbers: &[[i32; S]; S]) -> Opti
         }
     }
     return None;
-}
-
-pub fn puzzle_state_expander<const S: usize>(state: &PuzzleState<S>) -> Vec<PuzzleState<S>> {
-    let options = vec![
-        state.move_tile(UP),
-        state.move_tile(DOWN),
-        state.move_tile(LEFT),
-        state.move_tile(RIGHT),
-    ];
-    options
-        .into_iter()
-        .filter(|s| s.is_some())
-        .map(|s| s.unwrap())
-        .collect()
 }
