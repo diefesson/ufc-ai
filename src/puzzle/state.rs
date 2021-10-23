@@ -64,14 +64,15 @@ impl<const S: usize> PuzzleState<S> {
 
     pub fn solveable(&self) -> bool {
         let even_inversions = self.inversion_count() % 2 == 0;
+        let even_row = self.i % 2 == 0;
         if S % 2 == 0 {
-            even_inversions
-        } else {
             if even_inversions {
-                self.i % 2 == 1
+                !even_row
             } else {
-                self.i % 2 == 0
+                even_row
             }
+        } else {
+            even_inversions
         }
     }
 
@@ -93,20 +94,22 @@ impl<const S: usize> PuzzleState<S> {
         }
     }
 
-    pub fn correct_pos(number: i32) -> (usize, usize){
+    pub fn correct_pos(number: i32) -> (usize, usize) {
         let linear_pos = number - 1;
         let i = linear_pos / 4;
         let j = linear_pos % 4;
-        return (i as usize, j as usize); 
+        return (i as usize, j as usize);
     }
 
     pub fn inversion_count(&self) -> i32 {
-        let flattened = self.numbers.iter().flatten().copied().collect::<Vec<_>>();
+        let numbers = self.numbers.iter().flatten().copied().collect::<Vec<_>>();
         let mut inversions = 0;
-        for i in 0..flattened.len() {
-            for j in i..flattened.len() {
-                if flattened[i] > flattened[j] {
-                    inversions += 1;
+        for i in 0..numbers.len() {
+            for j in i..numbers.len() {
+                if numbers[i] != (S * S) as i32 && numbers[j] != (S * S) as i32 {
+                    if numbers[i] > numbers[j] {
+                        inversions += 1;
+                    }
                 }
             }
         }
