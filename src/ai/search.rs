@@ -43,7 +43,10 @@ pub fn search<S: State>(
 ) -> Vec<PathEntry<S>> {
     let first_entry = SearchEntry {
         state: start.clone(),
-        node: Default::default(),
+        node: Node {
+            distance: 0.0,
+            heuristic: heuristic(start),
+        },
         previous: None,
         successors: None,
     };

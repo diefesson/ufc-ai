@@ -55,26 +55,28 @@ impl Strategy for FifoStrategy {
     }
 }
 
-/* pub struct GreedyStrategy<'a, S: State> {
-    queue: PriorityQueue<&'a S, NotNan<f64>>,
+pub struct GreedyStrategy {
+    queue: PriorityQueue<usize, NotNan<f64>>,
 }
 
-impl<'a, S: State> Strategy<'a, S> for GreedyStrategy<'a, S> {
-    fn new() -> Self {
-        Self {
-            queue: PriorityQueue::new(),
+impl GreedyStrategy{
+    pub fn new() -> Self{
+        Self{
+            queue: PriorityQueue::new()
         }
     }
+}
 
-    fn add(&mut self, state: &'a S, node: &'a Node) {
+impl Strategy for GreedyStrategy {
+    fn add(&mut self, index: usize, node: &Node) {
         self.queue
-            .push(state, NotNan::new(-node.heuristic).unwrap());
+            .push(index, NotNan::new(-node.heuristic).unwrap());
     }
 
-    fn next(&mut self) -> &'a S {
+    fn next(&mut self) -> usize {
         self.queue.pop().unwrap().0
     }
-}  */
+}
 
 /* pub struct AStarStrategy<'a, S: State> {
     queue: PriorityQueue<&'a Node<S>, NotNan<f64>>,

@@ -10,7 +10,15 @@ use puzzle::*;
 fn main() {
     let ps = PuzzleState::<4>::new();
     let moved = ps.move_tile(LEFT).unwrap().move_tile(UP).unwrap();
-    println!("{:?}", ps);
-    println!("{}", wrong_place_heuristic(&moved));
-    println!("{}", manhattan_heuristic(&moved));
+    let path = search(
+        &moved,
+        GreedyStrategy::new(),
+        puzzle_verifier,
+        puzzle_expander,
+        one_distance,
+        wrong_place_heuristic,
+    );
+    for p in path{
+        println!("{:?}, {:?}", p.node(), p.state());
+    }
 }
