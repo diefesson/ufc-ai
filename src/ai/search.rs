@@ -35,6 +35,7 @@ impl<S: State> PathEntry<S> {
 
 pub fn search<S: State>(
     start: &S,
+    update: bool,
     mut strategy: impl Strategy,
     verifier: Verififer<S>,
     expander: Expander<S>,
@@ -61,6 +62,7 @@ pub fn search<S: State>(
         } else {
             expand(
                 index,
+                update,
                 &mut know,
                 &mut strategy,
                 &expander,
@@ -73,6 +75,7 @@ pub fn search<S: State>(
 
 fn expand<S: State>(
     index: usize,
+    update: bool,
     know: &mut Vec<SearchEntry<S>>,
     strategy: &mut impl Strategy,
     expander: &Expander<S>,
@@ -92,24 +95,49 @@ fn expand<S: State>(
             heuristic: heuristic(s),
         })
         .collect::<Vec<_>>();
-    for j in 0..next_indexes.len() {
-        if next_indexes[j].is_none() {
+    for i in 0..next_indexes.len() {
+        if next_indexes[i].is_none() {
             let new_index = know.len();
-            next_indexes[j] = Some(new_index);
-            strategy.add(new_index, &next_nodes[j]);
+            next_indexes[i] = Some(new_index);
+            strategy.add(new_index, &next_nodes[i]);
             know.push(SearchEntry {
-                state: next_states[j].clone(),
-                node: next_nodes[j].clone(),
+                state: next_states[i].clone(),
+                node: next_nodes[i].clone(),
                 previous: Some(index),
                 successors: None,
             });
         } else {
-            let know_index = next_indexes[j].unwrap();
-            let _better = strategy.update(know_index, &know[know_index].node, &next_nodes[j]);
-            // TODO: distance update logic
+            let know_index = next_indexes[i].unwrap();
+            let old = &know[know_index].node;
+            let new = &next_nodes[i];
+            if update && new.distance < old.distance {
+                let distance_reduction = new.distance - old.distance;
+                know[know_index].previous = Some(i);
+                reduce_distance(know_index, distance_reduction, know, strategy);
+            }
         }
     }
     know[index].successors = Some(next_indexes.into_iter().map(|i| i.unwrap()).collect());
+}
+
+fn reduce_distance<S: State>(
+    index: usize,
+    reduction: f64,
+    know: &mut Vec<SearchEntry<S>>,
+    strategy: &mut impl Strategy,
+) {
+    know[index].node.distance -= reduction;
+    let successors = know[index].successors.clone();
+    match successors {
+        Some(successors) => {
+            for s in successors {
+                if know[s].previous == Some(index) {
+                    reduce_distance(s, reduction, know, strategy);
+                }
+            }
+        }
+        None => strategy.update(index, &know[index].node),
+    }
 }
 
 fn build_path<S: State>(end: usize, know: Vec<SearchEntry<S>>) -> Vec<PathEntry<S>> {

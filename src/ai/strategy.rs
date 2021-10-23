@@ -1,6 +1,5 @@
 use ordered_float::NotNan;
 use priority_queue::PriorityQueue;
-use std::collections::HashMap;
 use std::collections::LinkedList;
 
 use super::node::*;
@@ -8,7 +7,7 @@ use super::node::*;
 pub trait Strategy {
     fn add(&mut self, index: usize, node: &Node);
 
-    fn update(&mut self, _index: usize, _old: &Node, _new: &Node) {}
+    fn update(&mut self, _index: usize, _new: &Node) {}
 
     fn next(&mut self) -> usize;
 }

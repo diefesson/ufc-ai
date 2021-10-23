@@ -25,13 +25,14 @@ fn main() {
     let ps = PuzzleState::<4>::new_with_numbers(PUZZLE_A);
     let path = search(
         &ps,
+        true,
         GreedyStrategy::new(),
         puzzle_verifier,
         puzzle_expander,
         one_distance,
-        wrong_place_heuristic,
+        manhattan_heuristic,
     );
     for p in path{
-        println!("{:?}, {:?}", p.node(), p.state().solveable());
+        println!("{:?}, {:?}", p.node(), p.state());
     }
 }
