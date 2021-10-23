@@ -9,7 +9,7 @@ use puzzle::*;
 
 fn main() {
     let ps = PuzzleState::<4>::new();
-    let moved = ps.move_tile(LEFT).unwrap().move_tile(UP).unwrap();
+    let moved = ps.move_tile(Left).unwrap().move_tile(Up).unwrap();
     let path = search(
         &moved,
         GreedyStrategy::new(),

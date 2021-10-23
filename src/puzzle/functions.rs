@@ -2,10 +2,10 @@ use crate::puzzle::*;
 
 pub fn puzzle_expander<const S: usize>(state: &PuzzleState<S>) -> Vec<PuzzleState<S>> {
     let options = vec![
-        state.move_tile(UP),
-        state.move_tile(DOWN),
-        state.move_tile(LEFT),
-        state.move_tile(RIGHT),
+        state.move_tile(Up),
+        state.move_tile(Down),
+        state.move_tile(Left),
+        state.move_tile(Right),
     ];
     options
         .into_iter()

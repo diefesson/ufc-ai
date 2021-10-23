@@ -1,10 +1,10 @@
 use crate::ai::node::State;
 
 pub enum MoveDirection {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 pub use MoveDirection::*;
@@ -12,10 +12,10 @@ pub use MoveDirection::*;
 impl MoveDirection {
     pub fn ij(&self) -> (isize, isize) {
         match self {
-            UP => (-1, 0),
-            DOWN => (1, 0),
-            LEFT => (0, -1),
-            RIGHT => (0, 1),
+            Up => (-1, 0),
+            Down => (1, 0),
+            Left => (0, -1),
+            Right => (0, 1),
         }
     }
 }
