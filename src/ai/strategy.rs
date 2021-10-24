@@ -77,22 +77,29 @@ impl Strategy for GreedyStrategy {
     }
 }
 
-/* pub struct AStarStrategy<'a, S: State> {
-    queue: PriorityQueue<&'a Node<S>, NotNan<f64>>,
+pub struct AStarStrategy {
+    queue: PriorityQueue<usize, NotNan<f64>>,
 }
 
-impl<'a, S: State> Strategy<'a, S> for AStarStrategy<'a, S> {
-    fn add(&mut self, node: &'a Node<S>) {
-        self.queue.push(node, NotNan::new(-node.total()).unwrap());
+impl AStarStrategy{
+    pub fn new() -> Self{
+        Self{
+            queue: PriorityQueue::new()
+        }
+    }
+}
+
+impl Strategy for AStarStrategy {
+    fn add(&mut self, index: usize, node: &Node) {
+        self.queue.push(index, NotNan::new(-node.total()).unwrap());
     }
 
-    fn update(&mut self, node: &'a Node<S>) {
+    fn update(&mut self, index: usize, new: &Node) {
         self.queue
-            .push_increase(node, NotNan::new(-node.total()).unwrap());
+            .push_increase(index, NotNan::new(-new.total()).unwrap());
     }
 
-    fn next(&mut self) -> &'a Node<S> {
+    fn next(&mut self) -> usize {
         self.queue.pop().unwrap().0
     }
 }
- */
