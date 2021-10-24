@@ -1,15 +1,17 @@
+use std::collections::LinkedList;
 use ordered_float::NotNan;
 use priority_queue::PriorityQueue;
-use std::collections::LinkedList;
 
 use super::node::*;
 
-pub trait Strategy {
+pub trait Strategy{
     fn add(&mut self, index: usize, node: &Node);
 
     fn update(&mut self, _index: usize, _new: &Node) {}
 
     fn next(&mut self) -> usize;
+
+    fn len(&self) -> usize;
 }
 
 pub struct LifoStrategy {
@@ -29,6 +31,10 @@ impl Strategy for LifoStrategy {
 
     fn next(&mut self) -> usize {
         self.stack.pop().unwrap()
+    }
+
+    fn len(&self) -> usize{
+        self.stack.len()
     }
 }
 
@@ -52,6 +58,10 @@ impl Strategy for FifoStrategy {
     fn next(&mut self) -> usize {
         self.queue.pop_front().unwrap()
     }
+
+    fn len(&self) -> usize{
+        self.queue.len()
+    }
 }
 
 pub struct GreedyStrategy {
@@ -74,6 +84,10 @@ impl Strategy for GreedyStrategy {
 
     fn next(&mut self) -> usize {
         self.queue.pop().unwrap().0
+    }
+
+    fn len(&self) -> usize{
+        self.queue.len()
     }
 }
 
@@ -101,5 +115,9 @@ impl Strategy for AStarStrategy {
 
     fn next(&mut self) -> usize {
         self.queue.pop().unwrap().0
+    }
+
+    fn len(&self) -> usize{
+        self.queue.len()
     }
 }

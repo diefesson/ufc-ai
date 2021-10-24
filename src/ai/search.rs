@@ -19,18 +19,8 @@ impl<S: State> SearchEntry<S> {
 }
 
 pub struct PathEntry<S: State> {
-    state: S,
-    node: Node,
-}
-
-impl<S: State> PathEntry<S> {
-    pub fn state(&self) -> &S {
-        &self.state
-    }
-
-    pub fn node(&self) -> &Node {
-        &self.node
-    }
+    pub state: S,
+    pub node: Node,
 }
 
 pub fn search<S: State>(

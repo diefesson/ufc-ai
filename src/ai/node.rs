@@ -2,7 +2,6 @@ use std::hash::{Hash};
 
 pub trait State: Eq + Clone + Hash {}
 
-// TODO: update data access
 #[derive(Clone, Default, Debug)]
 pub struct Node {
     pub distance: f64,
