@@ -1,13 +1,12 @@
+mod ai;
+mod demo;
+
 use std::time::Instant;
 
-mod ai;
-mod puzzle;
-
-use ai::functions::*;
-use ai::search::*;
-use ai::strategy::*;
-
-use puzzle::*;
+use ai::functions::one_distance;
+use ai::search::search;
+use ai::search::strategy::*;
+use demo::puzzle::*;
 
 const PUZZLE: [[i32; 4]; 4] = [
     [1, 2, 3, 4],

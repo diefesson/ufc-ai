@@ -1,24 +1,5 @@
-use crate::ai::node::State;
-
-pub enum MoveDirection {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
-pub use MoveDirection::*;
-
-impl MoveDirection {
-    pub fn ij(&self) -> (isize, isize) {
-        match self {
-            Up => (-1, 0),
-            Down => (1, 0),
-            Left => (0, -1),
-            Right => (0, 1),
-        }
-    }
-}
+use crate::ai::data::State;
+use crate::demo::puzzle::Movement;
 
 #[derive(Eq, Clone, Hash, Debug)]
 pub struct PuzzleState<const S: usize> {
@@ -62,21 +43,7 @@ impl<const S: usize> PuzzleState<S> {
         &self.numbers
     }
 
-    pub fn solveable(&self) -> bool {
-        let even_inversions = self.inversion_count() % 2 == 0;
-        let even_row = self.i % 2 == 0;
-        if S % 2 == 0 {
-            if even_inversions {
-                !even_row
-            } else {
-                even_row
-            }
-        } else {
-            even_inversions
-        }
-    }
-
-    pub fn move_tile(&self, move_direction: MoveDirection) -> Option<PuzzleState<S>> {
+    pub fn move_tile(&self, move_direction: Movement) -> Option<PuzzleState<S>> {
         let (di, dj) = move_direction.ij();
         let (i, j) = (self.i as isize + di, self.j as isize + dj);
         if Self::valid_pos(i, j) {
@@ -91,6 +58,20 @@ impl<const S: usize> PuzzleState<S> {
             return Some(moved);
         } else {
             None
+        }
+    }
+
+    pub fn solveable(&self) -> bool {
+        let even_inversions = self.inversion_count() % 2 == 0;
+        let even_row = self.i % 2 == 0;
+        if S % 2 == 0 {
+            if even_inversions {
+                !even_row
+            } else {
+                even_row
+            }
+        } else {
+            even_inversions
         }
     }
 

@@ -1,5 +1,6 @@
-use super::node::*;
 use super::strategy::Strategy;
+use crate::ai::data::Node;
+use crate::ai::data::State;
 
 struct SearchEntry<S: State> {
     state: S,

@@ -1,6 +1,6 @@
-use super::node::State;
+use crate::ai::data::State;
 
-pub fn one_distance<S: State>(_:&S, _: &S) -> f64 {
+pub fn one_distance<S: State>(_: &S, _: &S) -> f64 {
     1.0
 }
 
