@@ -17,17 +17,17 @@ const PUZZLE: [[i32; 4]; 4] = [
 ];
 
 fn main() {
-    let ps = PuzzleState::<4>::new_with_numbers(PUZZLE);
+    let ps = PuzzleState::with_numbers(PUZZLE);
 
     let start_time = Instant::now();
     let path = search(
-        &ps,
-        false,
+        ps,
+        true,
         AStarStrategy::new(),
-        puzzle_verifier,
-        puzzle_expander,
-        one_distance,
-        manhattan_heuristic,
+        &puzzle_expander,
+        &one_distance,
+        &manhattan_heuristic,
+        &puzzle_verifier,
     );
     let end_time = Instant::now();
 

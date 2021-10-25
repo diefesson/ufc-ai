@@ -42,7 +42,7 @@ impl<const S: usize> PuzzleState<S> {
         }
     }
 
-    pub fn new_with_numbers(numbers: [[i32; S]; S]) -> PuzzleState<S> {
+    pub fn with_numbers(numbers: [[i32; S]; S]) -> PuzzleState<S> {
         let zero_position = find_number((S * S) as i32, &numbers);
         match zero_position {
             Some((i, j)) => return Self { i, j, numbers },

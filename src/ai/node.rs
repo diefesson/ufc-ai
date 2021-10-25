@@ -2,7 +2,7 @@ use std::hash::{Hash};
 
 pub trait State: Eq + Clone + Hash {}
 
-#[derive(Clone, Default, Debug)]
+#[derive(Clone, Debug)]
 pub struct Node {
     pub distance: f64,
     pub heuristic: f64,

@@ -1,4 +1,3 @@
-use super::functions::*;
 use super::node::*;
 use super::strategy::Strategy;
 
@@ -23,20 +22,28 @@ pub struct PathEntry<S: State> {
     pub node: Node,
 }
 
-pub fn search<S: State>(
-    start: &S,
+pub fn search<S, St, E, D, H, V>(
+    start: S,
     update: bool,
-    mut strategy: impl Strategy,
-    verifier: Verififer<S>,
-    expander: Expander<S>,
-    distance: Distance<S>,
-    heuristic: Heuristic<S>,
-) -> Vec<PathEntry<S>> {
+    mut strategy: St,
+    expander: &E,
+    distance: &D,
+    heuristic: &H,
+    verifier: &V,
+) -> Vec<PathEntry<S>>
+where
+    S: State,
+    St: Strategy,
+    E: Fn(&S) -> Vec<S>,
+    D: Fn(&S, &S) -> f64,
+    H: Fn(&S) -> f64,
+    V: Fn(&S) -> bool,
+{
     let first_entry = SearchEntry {
         state: start.clone(),
         node: Node {
             distance: 0.0,
-            heuristic: heuristic(start),
+            heuristic: heuristic(&start),
         },
         previous: None,
         successors: None,
@@ -55,23 +62,29 @@ pub fn search<S: State>(
                 update,
                 &mut know,
                 &mut strategy,
-                &expander,
-                &distance,
-                &heuristic,
+                expander,
+                distance,
+                heuristic,
             );
         }
     }
 }
 
-fn expand<S: State>(
+fn expand<S, St, E, D, H>(
     index: usize,
     update: bool,
     know: &mut Vec<SearchEntry<S>>,
-    strategy: &mut impl Strategy,
-    expander: &Expander<S>,
-    distance: &Distance<S>,
-    heuristic: &Heuristic<S>,
-) {
+    strategy: &mut St,
+    expander: &E,
+    distance: &D,
+    heuristic: &H,
+) where
+    S: State,
+    St: Strategy,
+    E: Fn(&S) -> Vec<S>,
+    D: Fn(&S, &S) -> f64,
+    H: Fn(&S) -> f64,
+{
     let search_entry = &know[index];
     let next_states = expander(&search_entry.state);
     let mut next_indexes = next_states
@@ -110,12 +123,15 @@ fn expand<S: State>(
     know[index].successors = Some(next_indexes.into_iter().map(|i| i.unwrap()).collect());
 }
 
-fn reduce_distance<S: State>(
+fn reduce_distance<S, St>(
     index: usize,
     reduction: f64,
     know: &mut Vec<SearchEntry<S>>,
-    strategy: &mut impl Strategy,
-) {
+    strategy: &mut St,
+) where
+    S: State,
+    St: Strategy,
+{
     know[index].node.distance -= reduction;
     let successors = know[index].successors.clone();
     match successors {
