@@ -1,12 +1,9 @@
-mod ai;
-mod demo;
-
 use std::time::Instant;
 
-use ai::functions::one_distance;
-use ai::search::search;
-use ai::search::strategy::*;
-use demo::puzzle::*;
+use ufc_ai::functions::*;
+use ufc_ai::search::search;
+use ufc_ai::search::strategy::*;
+use ufc_ai::demo::puzzle::*;
 
 const PUZZLE: [[i32; 4]; 4] = [
     [1, 2, 3, 4],

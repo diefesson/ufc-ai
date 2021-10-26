@@ -1,7 +1,15 @@
 [package]
 name = "ufc-ai"
-version = "0.2.0"
+version = "0.2.2"
 edition = "2018"
+
+[lib]
+name = "ufc_ai"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ufc_ai_bin"
+path = "src/bin/bin.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
