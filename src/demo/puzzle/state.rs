@@ -1,7 +1,9 @@
+use std::hash::{Hash, Hasher};
+
 use crate::ai::data::State;
 use crate::demo::puzzle::Movement;
 
-#[derive(Eq, Clone, Hash, Debug)]
+#[derive(Eq, Clone, Debug)]
 pub struct PuzzleState<const S: usize> {
     i: usize,
     j: usize,
@@ -99,6 +101,12 @@ impl<const S: usize> PuzzleState<S> {
 
     pub fn valid_pos(i: isize, j: isize) -> bool {
         i >= 0 && j >= 0 && i < S as isize && j < S as isize
+    }
+}
+
+impl<const S: usize> Hash for PuzzleState<S> {
+    fn hash<H>(&self, hasher: &mut H) where H: Hasher {
+        self.numbers.hash(hasher);
     }
 }
 
