@@ -11,17 +11,21 @@ pub fn evolve<S, Sc, Se, C, M, V>(
 where
     S: State,
     Sc: Fn(&S) -> f64,
-    Se: Fn(Vec<S>, Vec<f64>, &C) -> Vec<S>,
+    Se: Fn(&Vec<f64>) -> usize,
     V: FnMut(&Vec<S>, &Vec<f64>) -> bool,
     C: Fn(&S, &S) -> S,
     M: Fn(S) -> S,
 {
     let mut scores = population.iter().map(|s| scorer(s)).collect::<Vec<_>>();
     loop {
-        population = selector(population, scores, crosser)
-            .into_iter()
-            .map(mutator)
-            .collect();
+        let mut offspring = Vec::with_capacity(population.len());
+        for _ in 0..population.len() {
+            let parent_0 = &population[selector(&scores)];
+            let parent_1 = &population[selector(&scores)];
+            let child = mutator(crosser(parent_0, parent_1));
+            offspring.push(child);
+        }
+        population = offspring;
         scores = population.iter().map(|s| scorer(s)).collect::<Vec<_>>();
         if verifier(&population, &scores) {
             return (population, scores);
