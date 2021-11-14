@@ -105,7 +105,10 @@ impl<const S: usize> PuzzleState<S> {
 }
 
 impl<const S: usize> Hash for PuzzleState<S> {
-    fn hash<H>(&self, hasher: &mut H) where H: Hasher {
+    fn hash<H>(&self, hasher: &mut H)
+    where
+        H: Hasher,
+    {
         self.numbers.hash(hasher);
     }
 }
