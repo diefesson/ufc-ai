@@ -1,7 +1,7 @@
 use std::error::Error;
-use ufc_ai::demo::gradient::demo;
+use ufc_ai::demo::gradient::*;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    demo()?;
+    demo_2()?;
     Ok(())
 }

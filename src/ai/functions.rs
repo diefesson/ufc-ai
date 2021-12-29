@@ -20,11 +20,11 @@ where
         .sum()
 }
 
-pub fn multi_linear(ms: &[f64], c: f64, x: &[f64]) -> f64 {
+pub fn multi_linear<const S: usize>(c: f64, ms: &[f64; S], x: &[f64; S]) -> f64 {
     assert!(ms.len() == x.len());
     ms.iter().zip(x.iter()).map(|(m, x)| m * x).sum::<f64>() + c
 }
 
-pub fn linear(m: f64, c: f64, x: f64) -> f64 {
-    multi_linear(&vec![m], c, &[x])
+pub fn linear(c: f64, m: f64, x: f64) -> f64 {
+    multi_linear(c, &[m], &[x])
 }

@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plot
 
-_DATA_PATH = "output/mse-x-epoch.csv"
-_OUTPUT_PATH = "output/mse-x-epoch.png"
+_DATA_PATH = "output/output-1.csv"
+_OUTPUT_PATH = "output/output-1.png"
 
 
 def main():
