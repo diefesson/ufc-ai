@@ -1,13 +1,13 @@
-pub fn optimize<G, O, const S: usize>(
-    initial: [f64; S],
+pub fn optimize<G, O>(
+    initial: Vec<f64>,
     rate: f64,
     epochs: usize,
     gradient: G,
     mut on_epoch: O,
-) -> [f64; S]
+) -> Vec<f64>
 where
-    G: Fn(&[f64; S]) -> [f64; S],
-    O: FnMut(usize, &[f64; S]),
+    G: Fn(&[f64]) -> Vec<f64>,
+    O: FnMut(usize, &Vec<f64>),
 {
     let mut value = initial;
     for e in 0..epochs {

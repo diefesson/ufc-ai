@@ -10,28 +10,30 @@ use std::error::Error;
 
 pub fn demo() -> Result<(), Box<dyn Error>> {
     let mut random = StdRng::seed_from_u64(2334234);
-    let (x_data, y_data): (Vec<f64>, Vec<f64>) = Reader::from_path(DATASET_PATH)?
+    let (x_data, y_data): (Vec<_>, Vec<_>) = Reader::from_path(DATASET_PATH)?
         .deserialize()
         .map(|r: Result<(f64, f64), _>| {
             let r = r.unwrap();
-            (r.0, r.1)
+            (vec![r.0], r.1)
         })
         .unzip();
 
     let subset_size = (x_data.len() as f64 * 0.2) as usize;
     let subset_indexes = sample(&mut random, x_data.len(), subset_size);
-    let x_subset: Vec<_> = subset_indexes.iter().map(|i| x_data[i]).collect();
+    let x_subset: Vec<_> = subset_indexes.iter().map(|i| x_data[i].clone()).collect();
     let y_subset: Vec<_> = subset_indexes.iter().map(|i| y_data[i]).collect();
 
     let mut mses = Vec::<f64>::new();
 
     let params = optimize(
-        [1.0, 0.0],
+        [1.0, 0.0].into(),
         0.001,
         1000,
         |params| linear_gradient(params, &x_subset, &y_subset),
-        |e, [m, c]| {
-            let error = mse(|x| linear(*m, *c, *x), &x_data, &y_data);
+        |e, params| {
+            let m = params[0];
+            let c = params[1];
+            let error = mse(|x| linear(m, c, x[0]), &x_data, &y_data);
             println!("completed epoch {}, m: {} c: {}, mse: {}", e, m, c, error);
 
             mses.push(error);
