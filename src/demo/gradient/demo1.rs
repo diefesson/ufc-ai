@@ -1,23 +1,25 @@
-use crate::demo::gradient::{DATASET_PATH_1, OUTPUT_PATH_1};
 use crate::functions::{linear, mse};
-use crate::gradient::gradients::linear_gradient;
+use crate::gradient::gradients::new_linear_gradient;
 use crate::gradient::optimize;
+use crate::gradient::regularizations::no_regularization;
 use csv::{Reader, Writer};
 use rand::prelude::StdRng;
 use rand::seq::index::sample;
 use rand::SeedableRng;
-use std::convert::TryInto;
 use std::error::Error;
+
+const DATASET_PATH_1: &str = "data/ex1data1.txt";
+const OUTPUT_PATH_1: &str = "output/output-1.csv";
 
 pub fn demo_1() -> Result<(), Box<dyn Error>> {
     let mut random = StdRng::seed_from_u64(2334234);
-    let (x_data, y_data): (Vec<_>, Vec<_>) = Reader::from_path(DATASET_PATH_1)?
-        .deserialize()
-        .map(|r: Result<(f64, f64), _>| {
-            let r = r.unwrap();
-            ([r.0], r.1)
-        })
-        .unzip();
+    let mut x_data = Vec::<[f64; 1]>::new();
+    let mut y_data = Vec::<f64>::new();
+    for r in Reader::from_path(DATASET_PATH_1)?.deserialize() {
+        let (x, y) = r?;
+        x_data.push([x]);
+        y_data.push(y);
+    }
 
     let subset_size = (x_data.len() as f64 * 0.2) as usize;
     let subset_indexes = sample(&mut random, x_data.len(), subset_size);
@@ -28,16 +30,11 @@ pub fn demo_1() -> Result<(), Box<dyn Error>> {
 
     let params = optimize(
         [0.0, 1.0],
-        0.001,
         1000,
-        |params| {
-            linear_gradient(
-                params[0],
-                params[1..].try_into().unwrap(),
-                &x_subset,
-                &y_subset,
-            )
-        },
+        0.001,
+        Default::default(),
+        new_linear_gradient(&x_subset, &y_subset),
+        no_regularization,
         |e, params| {
             let c = params[0];
             let m = params[1];
