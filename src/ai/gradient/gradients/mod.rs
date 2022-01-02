@@ -1,3 +1,3 @@
-mod lineargradient;
+mod linear;
 
-pub use lineargradient::*;
+pub use linear::*;
