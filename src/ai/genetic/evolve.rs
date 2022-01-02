@@ -25,5 +25,5 @@ where
         population = offspring;
         scores = population.iter().map(|s| scorer(s)).collect::<Vec<_>>();
     }
-    return (population, scores);
+    (population, scores)
 }

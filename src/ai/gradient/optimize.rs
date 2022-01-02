@@ -20,5 +20,5 @@ where
         }
         on_epoch(e, &value);
     }
-    return value;
+    value
 }

@@ -22,13 +22,13 @@ pub fn demo_2() -> Result<(), Box<dyn Error>> {
 
     let subset_size = (x_data.len() as f64 * 0.2) as usize;
     let subset_indexes = sample(&mut random, x_data.len(), subset_size);
-    let x_subset: Vec<_> = subset_indexes.iter().map(|i| x_data[i].clone()).collect();
+    let x_subset: Vec<_> = subset_indexes.iter().map(|i| x_data[i]).collect();
     let y_subset: Vec<_> = subset_indexes.iter().map(|i| y_data[i]).collect();
 
     let mut mses = Vec::<f64>::new();
 
     let params = optimize(
-        [1.0, 1.0, 0.0].into(),
+        [1.0, 1.0, 0.0],
         100,
         0.01,
         Default::default(),

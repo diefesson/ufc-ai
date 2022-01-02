@@ -30,7 +30,7 @@ pub fn demo_3() -> Result<(), Box<dyn Error>> {
 
     for l in lambdas {
         let params = optimize(
-            initial.clone(),
+            initial,
             1000,
             0.001,
             [0., l, l, l, l, l],

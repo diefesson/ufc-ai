@@ -1,5 +1,5 @@
 use crate::ai::data::Node;
-use crate::ai::search::strategy::Strategy;
+use crate::ai::search::strategies::Strategy;
 
 pub struct LifoStrategy {
     stack: Vec<usize>,
@@ -8,6 +8,12 @@ pub struct LifoStrategy {
 impl LifoStrategy {
     pub fn new() -> Self {
         Self { stack: Vec::new() }
+    }
+}
+
+impl Default for LifoStrategy {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -22,5 +28,9 @@ impl Strategy for LifoStrategy {
 
     fn len(&self) -> usize {
         self.stack.len()
+    }
+
+    fn is_empty(&self) -> bool {
+        self.stack.is_empty()
     }
 }
