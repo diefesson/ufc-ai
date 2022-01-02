@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 
 use crate::ai::data::Node;
-use crate::ai::search::strategies::Strategy;
+use crate::ai::search::strategy::Strategy;
 
 pub struct FifoStrategy {
     queue: LinkedList<usize>,
@@ -12,12 +12,6 @@ impl FifoStrategy {
         Self {
             queue: LinkedList::new(),
         }
-    }
-}
-
-impl Default for FifoStrategy {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
@@ -32,9 +26,5 @@ impl Strategy for FifoStrategy {
 
     fn len(&self) -> usize {
         self.queue.len()
-    }
-
-    fn is_empty(&self) -> bool {
-        self.queue.is_empty()
     }
 }

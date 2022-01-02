@@ -1,5 +1,5 @@
-mod algorithm;
-pub mod strategies;
+mod search;
+pub mod strategy;
 
-pub use algorithm::search;
-pub use algorithm::PathEntry;
+pub use search::search;
+pub use search::PathEntry;

@@ -11,7 +11,6 @@ pub struct PuzzleState<const S: usize> {
 }
 
 impl<const S: usize> PuzzleState<S> {
-    #[allow(clippy::needless_range_loop)]
     pub fn new() -> Self {
         let mut numbers = [[0; S]; S];
         for i in 0..S {
@@ -29,7 +28,7 @@ impl<const S: usize> PuzzleState<S> {
     pub fn with_numbers(numbers: [[i32; S]; S]) -> PuzzleState<S> {
         let zero_position = find_number((S * S) as i32, &numbers);
         match zero_position {
-            Some((i, j)) => Self { i, j, numbers },
+            Some((i, j)) => return Self { i, j, numbers },
             None => panic!("missing final number"),
         }
     }
@@ -52,13 +51,13 @@ impl<const S: usize> PuzzleState<S> {
         if Self::valid_pos(i, j) {
             let (i, j) = (i as usize, j as usize);
             let mut moved = Self {
-                numbers: self.numbers,
+                numbers: self.numbers.clone(),
                 i: i as usize,
                 j: j as usize,
             };
             moved.numbers[i][j] = self.numbers[self.i][self.j];
             moved.numbers[self.i][self.j] = self.numbers[i][j];
-            Some(moved)
+            return Some(moved);
         } else {
             None
         }
@@ -80,12 +79,11 @@ impl<const S: usize> PuzzleState<S> {
 
     pub fn correct_pos(number: i32) -> (usize, usize) {
         let linear_pos = number - 1;
-        let i = (linear_pos / 4) as usize;
-        let j = (linear_pos % 4) as usize;
-        (i, j)
+        let i = linear_pos / 4;
+        let j = linear_pos % 4;
+        return (i as usize, j as usize);
     }
 
-    #[allow(clippy::collapsible_if)]
     pub fn inversion_count(&self) -> i32 {
         let numbers = self.numbers.iter().flatten().copied().collect::<Vec<_>>();
         let mut inversions = 0;
@@ -98,7 +96,7 @@ impl<const S: usize> PuzzleState<S> {
                 }
             }
         }
-        inversions
+        return inversions;
     }
 
     pub fn valid_pos(i: isize, j: isize) -> bool {
@@ -123,12 +121,6 @@ impl<const S: usize> PartialEq for PuzzleState<S> {
 
 impl<const S: usize> State for PuzzleState<S> {}
 
-impl<const S: usize> Default for PuzzleState<S> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 pub fn find_number<const S: usize>(number: i32, numbers: &[[i32; S]; S]) -> Option<(usize, usize)> {
     for (i, row) in numbers.iter().enumerate() {
         for (j, n) in row.iter().enumerate() {
@@ -137,5 +129,5 @@ pub fn find_number<const S: usize>(number: i32, numbers: &[[i32; S]; S]) -> Opti
             }
         }
     }
-    None
+    return None;
 }

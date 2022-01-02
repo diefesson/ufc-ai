@@ -9,7 +9,7 @@ pub fn tournament_selector(ratio: f64) -> impl Fn(&Vec<f64>) -> usize {
             .collect::<Vec<_>>()
             .choose_multiple(&mut thread_rng(), count)
             .max_by(|a, b| scores[**a].partial_cmp(&scores[**b]).unwrap())
-            .copied()
             .unwrap()
+            .clone()
     }
 }

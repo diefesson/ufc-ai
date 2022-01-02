@@ -2,13 +2,13 @@ use ordered_float::NotNan;
 use priority_queue::PriorityQueue;
 
 use crate::ai::data::Node;
-use crate::ai::search::strategies::Strategy;
+use crate::ai::search::strategy::Strategy;
 
-pub struct GreedyStrategy {
+pub struct AStarStrategy {
     queue: PriorityQueue<usize, NotNan<f64>>,
 }
 
-impl GreedyStrategy {
+impl AStarStrategy {
     pub fn new() -> Self {
         Self {
             queue: PriorityQueue::new(),
@@ -16,16 +16,14 @@ impl GreedyStrategy {
     }
 }
 
-impl Default for GreedyStrategy {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl Strategy for GreedyStrategy {
+impl Strategy for AStarStrategy {
     fn add(&mut self, index: usize, node: &Node) {
+        self.queue.push(index, NotNan::new(-node.total()).unwrap());
+    }
+
+    fn update(&mut self, index: usize, new: &Node) {
         self.queue
-            .push(index, NotNan::new(-node.heuristic).unwrap());
+            .push_increase(index, NotNan::new(-new.total()).unwrap());
     }
 
     fn next(&mut self) -> usize {
@@ -34,9 +32,5 @@ impl Strategy for GreedyStrategy {
 
     fn len(&self) -> usize {
         self.queue.len()
-    }
-
-    fn is_empty(&self) -> bool {
-        self.queue.is_empty()
     }
 }

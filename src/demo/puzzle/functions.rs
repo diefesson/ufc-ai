@@ -7,7 +7,11 @@ pub fn puzzle_expander<const S: usize>(state: &PuzzleState<S>) -> Vec<PuzzleStat
         state.move_tile(Left),
         state.move_tile(Right),
     ];
-    options.into_iter().flatten().collect()
+    options
+        .into_iter()
+        .filter(|s| s.is_some())
+        .map(|s| s.unwrap())
+        .collect()
 }
 
 pub fn puzzle_verifier<const S: usize>(state: &PuzzleState<S>) -> bool {
@@ -26,7 +30,7 @@ pub fn wrong_place_heuristic<const S: usize>(state: &PuzzleState<S>) -> f64 {
             }
         }
     }
-    count
+    return count;
 }
 
 pub fn manhattan_heuristic<const S: usize>(state: &PuzzleState<S>) -> f64 {
@@ -39,5 +43,5 @@ pub fn manhattan_heuristic<const S: usize>(state: &PuzzleState<S>) -> f64 {
             distance += (correct_j as f64 - j as f64).abs();
         }
     }
-    distance
+    return distance;
 }
