@@ -17,7 +17,8 @@ pub fn least_squares<const X: usize, const O: usize>(
         |r, c| if c == 0 { 1.0 } else { x_data[r][c - 1] },
     );
     let y = YMatrix::from_iterator(y_data.len(), y_data.iter().copied());
-    let b = (x.transpose() * &x).try_inverse().unwrap() * x.transpose() * y;
+    let p = (x.transpose() * &x).try_inverse().unwrap() * x.transpose();
+    let b = p * y;
     b.into_iter()
         .copied()
         .collect::<Vec<f64>>()
