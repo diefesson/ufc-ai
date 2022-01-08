@@ -1,23 +1,23 @@
-use nalgebra::*;
+use nalgebra::DMatrix;
 use std::convert::TryInto;
-
-type XMatrix = OMatrix<f64, Dynamic, U3>;
-type YMatrix = OMatrix<f64, Dynamic, U1>;
 
 pub fn least_squares<const X: usize, const O: usize>(
     x_data: &[[f64; X]],
     y_data: &[f64],
+    lambda: f64,
 ) -> [f64; O] {
-    debug_assert!(
-        X == O - 1,
-        "params must be 1 unit greather than x because c"
+    debug_assert_eq!(
+        X,
+        O - 1,
+        "output vector len should be 1 unit greater than x vectors len"
     );
-    let x = XMatrix::from_fn(
-        x_data.len(),
-        |r, c| if c == 0 { 1.0 } else { x_data[r][c - 1] },
-    );
-    let y = YMatrix::from_iterator(y_data.len(), y_data.iter().copied());
-    let p = (x.transpose() * &x).try_inverse().unwrap() * x.transpose();
+    assert_eq!(x_data.len(), y_data.len());
+
+    let n = x_data.len();
+    let x = DMatrix::from_fn(n, O, |r, c| if c == 0 { 1.0 } else { x_data[r][c - 1] });
+    let y = DMatrix::from_iterator(n, 1, y_data.iter().copied());
+    let r = DMatrix::from_diagonal_element(O, O, lambda);
+    let p = (x.transpose() * &x + r).try_inverse().unwrap() * x.transpose();
     let b = p * y;
     b.into_iter()
         .copied()

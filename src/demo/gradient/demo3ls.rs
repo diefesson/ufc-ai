@@ -1,19 +1,16 @@
 use super::util::write_csv;
 use crate::functions::{mse, multi_linear};
-use crate::gradient::gradients::new_linear_gradient;
-use crate::gradient::optimize;
-use crate::gradient::regularizations::l1;
+use crate::leastsquares::least_squares;
 use csv::Reader;
-use std::convert::TryInto;
-use std::error::Error;
+use std::{convert::TryInto, error::Error};
 
 const DATASET_PATH: &str = "data/ex1data3.txt";
-const TRAIN_OUTPUT_PATH: &str = "output/output-3-train.csv";
-const TEST_OUTPUT_PATH: &str = "output/output-3-test.csv";
+const TRAIN_OUTPUT_PATH: &str = "output/output-3-ls-train.csv";
+const TEST_OUTPUT_PATH: &str = "output/output-3-ls-test.csv";
 
-pub fn demo_3() -> Result<(), Box<dyn Error>> {
-    let mut x_data = vec![];
-    let mut y_data = vec![];
+pub fn demo_3_ls() -> Result<(), Box<dyn Error>> {
+    let mut x_data = Vec::new();
+    let mut y_data = Vec::new();
     for r in Reader::from_path(DATASET_PATH)?.deserialize() {
         let r: [f64; 6] = r?;
         x_data.push([r[0], r[1], r[2], r[3], r[4]]);
@@ -27,15 +24,7 @@ pub fn demo_3() -> Result<(), Box<dyn Error>> {
     let mut test_mses = vec![];
 
     for l in lambdas {
-        let params = optimize(
-            [0., 0., 0., 0., 0., 0.],
-            1000,
-            0.001,
-            [0., l, l, l, l, l],
-            new_linear_gradient(x_train, y_train),
-            l1,
-            |_, _| {},
-        );
+        let params: [f64; 6] = least_squares(&x_train, &y_train, l);
         let c = params[0];
         let ms = params[1..].try_into().unwrap();
         train_mses.push((l, mse(|x| multi_linear(c, ms, x), x_train, y_train)));

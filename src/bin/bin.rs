@@ -15,8 +15,9 @@ const DEMOS: &[(&str, fn() -> Result<(), Box<dyn Error>>)] = &[
     }),
     ("regression demo 1 SGD", gradient::demo_1),
     ("regression demo 2 SGD", gradient::demo_2),
-    ("regression demo 2 least squares", gradient::demo_2_ls),
+    ("regression demo 2 LS", gradient::demo_2_ls),
     ("regression demo 3 SGD", gradient::demo_3),
+    ("regression demo 3 LS", gradient::demo_3_ls),
 ];
 
 fn main() -> Result<(), Box<dyn Error>> {

@@ -13,7 +13,7 @@ pub fn demo_2_ls() -> Result<(), Box<dyn Error>> {
         y_data.push(r.2);
     }
 
-    let coeficients: [f64; 3] = least_squares(&x_data, &y_data);
+    let coeficients: [f64; 3] = least_squares(&x_data, &y_data, 0.);
 
     println!("{:?}", coeficients);
 
