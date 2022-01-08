@@ -2,7 +2,7 @@ use std::time::Instant;
 
 use crate::ai::functions::*;
 use crate::ai::search::search;
-use crate::ai::search::strategy::*;
+use crate::ai::search::strategies::*;
 use crate::demo::puzzle::*;
 
 const PUZZLE: [[i32; 4]; 4] = [

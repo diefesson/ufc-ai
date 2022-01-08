@@ -8,4 +8,6 @@ pub trait Strategy {
     fn next(&mut self) -> usize;
 
     fn len(&self) -> usize;
+
+    fn is_empty(&self) -> bool;
 }

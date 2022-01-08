@@ -1,4 +1,4 @@
-use super::strategy::Strategy;
+use super::strategies::Strategy;
 use crate::ai::data::Node;
 use crate::ai::data::State;
 
@@ -159,5 +159,5 @@ fn build_path<S: State>(end: usize, know: Vec<SearchEntry<S>>) -> Vec<PathEntry<
             break;
         }
     }
-    return path;
+    path
 }
