@@ -1,8 +1,8 @@
 use std::error::Error;
 use std::io::stdin;
 use ufc_ai::demo::genetic;
-use ufc_ai::demo::gradient;
 use ufc_ai::demo::puzzle;
+use ufc_ai::demo::regression;
 
 const DEMOS: &[(&str, fn() -> Result<(), Box<dyn Error>>)] = &[
     ("puzzle demo", || {
@@ -13,11 +13,11 @@ const DEMOS: &[(&str, fn() -> Result<(), Box<dyn Error>>)] = &[
         genetic::demo();
         Ok(())
     }),
-    ("regression demo 1 SGD", gradient::demo_1),
-    ("regression demo 2 SGD", gradient::demo_2),
-    ("regression demo 2 LS", gradient::demo_2_ls),
-    ("regression demo 3 SGD", gradient::demo_3),
-    ("regression demo 3 LS", gradient::demo_3_ls),
+    ("regression demo 1 SGD", regression::demo_1),
+    ("regression demo 2 SGD", regression::demo_2),
+    ("regression demo 2 LS", regression::demo_2_ls),
+    ("regression demo 3 SGD", regression::demo_3),
+    ("regression demo 3 LS", regression::demo_3_ls),
 ];
 
 fn main() -> Result<(), Box<dyn Error>> {
