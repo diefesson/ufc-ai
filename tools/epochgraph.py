@@ -27,6 +27,4 @@ if __name__ == "__main__":
             "usage: command <data_path> <figure_path> [x_label] [y_label] [line_label]"
         )
     else:
-        data_path = sys.argv[1]
-        figure_path = sys.argv[2]
-        create_epoch_graph(data_path, figure_path)
+        create_epoch_graph(*sys.argv[1:])
