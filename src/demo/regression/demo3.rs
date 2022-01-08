@@ -1,9 +1,9 @@
+use super::util::write_csv;
 use crate::functions::{mse, multi_linear};
 use crate::gradient::gradients::new_linear_gradient;
 use crate::gradient::optimize;
 use crate::gradient::regularizations::l1;
-use csv::{Reader, Writer};
-use serde::Serialize;
+use csv::Reader;
 use std::convert::TryInto;
 use std::error::Error;
 
@@ -22,15 +22,13 @@ pub fn demo_3() -> Result<(), Box<dyn Error>> {
 
     let (x_train, x_test) = x_data.split_at(30);
     let (y_train, y_test) = y_data.split_at(30);
-
-    let initial = [0., 1., 1., 1., 1., 1.];
     let lambdas = [0., 1., 2., 3., 4., 5.];
     let mut train_mses = vec![];
     let mut test_mses = vec![];
 
     for l in lambdas {
         let params = optimize(
-            initial,
+            [0., 0., 0., 0., 0., 0.],
             1000,
             0.001,
             [0., l, l, l, l, l],
@@ -47,13 +45,5 @@ pub fn demo_3() -> Result<(), Box<dyn Error>> {
     write_csv(&train_mses, TRAIN_OUTPUT_PATH)?;
     write_csv(&test_mses, TEST_OUTPUT_PATH)?;
 
-    Ok(())
-}
-
-fn write_csv<T: Serialize>(data: &[T], path: &str) -> Result<(), Box<dyn Error>> {
-    let mut writer = Writer::from_path(path)?;
-    for r in data {
-        writer.serialize(r)?;
-    }
     Ok(())
 }
