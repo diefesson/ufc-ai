@@ -1,10 +1,12 @@
 use std::error::Error;
 use std::io::stdin;
 use ufc_ai::demo::genetic;
+use ufc_ai::demo::playground;
 use ufc_ai::demo::puzzle;
 use ufc_ai::demo::regression;
 
 const DEMOS: &[(&str, fn() -> Result<(), Box<dyn Error>>)] = &[
+    ("playground", playground::playground),
     ("puzzle demo", || {
         puzzle::demo();
         Ok(())
