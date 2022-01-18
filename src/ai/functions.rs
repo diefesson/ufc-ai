@@ -1,6 +1,6 @@
 use core::f64;
 
-use crate::ai::data::State;
+use crate::ai::search::data::State;
 
 pub fn one_distance<S: State>(_: &S, _: &S) -> f64 {
     1.0

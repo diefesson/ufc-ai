@@ -1,4 +1,4 @@
-use crate::ai::data::Node;
+use crate::ai::search::data::Node;
 
 pub trait Strategy {
     fn add(&mut self, index: usize, node: &Node);

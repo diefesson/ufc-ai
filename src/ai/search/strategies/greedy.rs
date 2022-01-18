@@ -1,7 +1,7 @@
 use ordered_float::NotNan;
 use priority_queue::PriorityQueue;
 
-use crate::ai::data::Node;
+use crate::ai::search::data::Node;
 use crate::ai::search::strategies::Strategy;
 
 pub struct GreedyStrategy {
