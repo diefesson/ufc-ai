@@ -1,5 +1,6 @@
 use std::error::Error;
 use std::io::stdin;
+use ufc_ai::demo::clustering;
 use ufc_ai::demo::genetic;
 use ufc_ai::demo::puzzle;
 use ufc_ai::demo::regression;
@@ -18,6 +19,7 @@ const DEMOS: &[(&str, fn() -> Result<(), Box<dyn Error>>)] = &[
     ("regression demo 2 LS", regression::demo_2_ls),
     ("regression demo 3 SGD", regression::demo_3),
     ("regression demo 3 LS", regression::demo_3_ls),
+    ("k means demo", clustering::demo),
 ];
 
 fn main() -> Result<(), Box<dyn Error>> {
