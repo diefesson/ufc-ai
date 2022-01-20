@@ -1,4 +1,3 @@
-mod demo;
-pub mod util;
+mod kmeansdemo;
 
-pub use demo::*;
+pub use kmeansdemo::*;
