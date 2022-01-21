@@ -20,6 +20,7 @@ const DEMOS: &[(&str, fn() -> Result<(), Box<dyn Error>>)] = &[
     ("regression demo 3 SGD", regression::demo_3),
     ("regression demo 3 LS", regression::demo_3_ls),
     ("k means demo", clustering::k_means_demo),
+    ("knn demo", clustering::knn_demo),
 ];
 
 fn main() -> Result<(), Box<dyn Error>> {
