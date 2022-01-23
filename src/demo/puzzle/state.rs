@@ -1,6 +1,6 @@
 use std::hash::{Hash, Hasher};
 
-use crate::ai::data::State;
+use crate::ai::search::data::State;
 use crate::demo::puzzle::Movement;
 
 #[derive(Eq, Clone, Debug)]

@@ -1,6 +1,6 @@
 use std::collections::LinkedList;
 
-use crate::ai::data::Node;
+use crate::ai::search::data::Node;
 use crate::ai::search::strategies::Strategy;
 
 pub struct FifoStrategy {
